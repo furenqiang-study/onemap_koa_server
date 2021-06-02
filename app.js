@@ -19,3 +19,9 @@ app.use(respDataMiddleware);
 
 //3、绑定端口号3000
 app.listen(3000);
+
+//4、websocket的使用
+//引入websocket_utils.js
+const webSocketService=require('./utils/websocket_utils')
+//开启服务端的监听
+webSocketService.listen()

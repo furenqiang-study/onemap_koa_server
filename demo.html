@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <button id="connId">连接</button>
+  <input id="textId" type="text"></input>
+  <button id="sendId" disabled="true">发送</button></br>
+  接收到的信息：<span id="msgId"></span>
+</body>
+<script>
+  var conn=document.getElementById('connId')
+  var send=document.getElementById('sendId')
+  var msgId=document.getElementById('msgId')
+  var textId=document.getElementById('textId')
+  var ws=null
+  conn.onclick=function(){
+    ws=new WebSocket("ws://localhost:9998")
+    ws.onopen=()=>{
+      console.log("连接成功");
+      send.disabled=false
+    }
+    ws.onmessage=(msg)=>{
+      console.log(msg);
+      msgId.innerHTML=msg.data
+    }
+    ws.onclose=()=>{
+      console.log("关闭连接");
+      send.disabled=true
+    }
+  }
+  send.onclick=function(){
+    console.log("开始发送");
+    //ws.send("hello from demo.html")
+    let chartName=textId.value
+    ws.send(JSON.stringify({
+      action:'getData',
+      socketType:'trendData',
+      chartName:chartName,
+      value:''
+    }))
+  }
+</script>
+</html>
